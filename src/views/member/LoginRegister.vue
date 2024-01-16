@@ -40,7 +40,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button @click="signin" class="btn btn-primary">登入</button>
+                                <button @click="login" class="btn btn-primary">登入</button>
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@
 
         
                         <div :class="registerFormActive" id="pills-register"  role="tabpanel" aria-labelledby="pills-register-tab">
-                            <h5 class="text-center">Create New Account</h5>
+                            <h5 class="text-center">會員註冊</h5>
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input v-model="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
@@ -58,7 +58,7 @@
                                 <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary">會員註冊</button>
+                                <button @click="signup" class="btn btn-primary">註冊</button>
                             </div>
                         </div>
                     </div>
@@ -105,7 +105,7 @@ function setActiveTab(tab){
     }
 }
 let vm = this;
-function signin() {
+function login() {
 
     let emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
 
@@ -117,7 +117,7 @@ function signin() {
             })
         console.log(`email:${email.value}password:${password.value}`)
         let request ={
-            "userAccount":email.value,
+            "userEmail":email.value,
             "password":password.value
         }
         axios.post("http://localhost:8080/pet/login", request, {
@@ -164,8 +164,46 @@ function signin() {
         console.log("false")
         emailError.value = "email格式錯誤"
     }
+}
 
-
+function signup(){
+    Swal.fire({
+                text: "Loading.....",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            })
+    let request = {
+        "userEmail":email.value,
+        "password":password.value
+    }
+    axios.post("http://localhost:8080/pet/sign" , request , {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(function(response){
+            console.log(response);
+            Swal.fire({
+                    icon: "success",
+                    title: response.data,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+                setTimeout(function () {
+                    Swal.close();
+                }, 1000);
+                var backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.parentNode.removeChild(backdrop);
+                }
+                router.push({name:'home'})
+        }).catch(function(error){
+            console.log(error);
+            Swal.fire({
+                icon: "error",
+                title: "登入失敗",
+                text: error.response.data,
+            });
+                })
 }
 </script>
     
