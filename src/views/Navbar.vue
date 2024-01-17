@@ -25,9 +25,9 @@
                                 <RouterLink class="dropdown-item" :to="{ name: 'infiniteScrolling' }">測試滾動</RouterLink>
 
                             </li>
-                            <li>
+                            <!-- <li>
                                 <RouterLink class="dropdown-item" :to="{ name: 'loginregister' }">測試登入註冊</RouterLink>
-                            </li>
+                            </li> -->
                         </ul>
                     </li>
 
@@ -36,6 +36,7 @@
                     <li class="nav-item" style="text-align:left;">
                         <RouterLink class="nav-link" :to="{ name: 'login' }">會員登入</RouterLink>
                     </li>
+                    <div><xxx style="float:left"></xxx></div>
 
 
                     
@@ -47,10 +48,11 @@
 
     </nav>
     <RouterView></RouterView>
+
 </template>
     
 <script setup >
-
+import xxx from './member/LoginRegister.vue'
 </script>
     
 <style></style>
