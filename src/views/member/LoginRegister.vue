@@ -239,7 +239,7 @@ function login() {
             }
 
         }).catch(function(error){
-            console.log(error)
+            console.log("hahah")
             Swal.fire({
                 icon: "error",
                 title: "登入失敗",
