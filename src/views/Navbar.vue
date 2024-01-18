@@ -12,8 +12,9 @@
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             通報
                         </a>
@@ -23,26 +24,37 @@
                             </li>
                             <li>
                                 <RouterLink class="dropdown-item" :to="{ name: 'infiniteScrolling' }">測試滾動</RouterLink>
-
                             </li>
-                            <!-- <li>
-                                <RouterLink class="dropdown-item" :to="{ name: 'loginregister' }">測試登入註冊</RouterLink>
-                            </li> -->
                         </ul>
                     </li>
 
 
 
-                    <li class="nav-item" style="text-align:left;">
-                        <RouterLink class="nav-link" :to="{ name: 'login' }">會員登入</RouterLink>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                    <div><loginRegister @send-is-logged-in="getIsLoggedInFromComponent" @send-user-email="getUserEmail"></loginRegister></div>
+                        </a>
+                        <ul class="dropdown-menu" v-if="!isLoggedIn" >
+                            <!--  -->
+                            <li>
+                                <RouterLink class="dropdown-item" :to="{ name: 'memberInfo' , params:{email:'email'}}">會員中心</RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink class="dropdown-item" :to="{ name: 'infiniteScrolling' }">登出</RouterLink>
+                            </li>
+                        </ul>
                     </li>
-                    <div><xxx style="float:left"></xxx></div>
+
+
+
 
 
                     
                 </ul><!-- navbar -->
             </div>
         </div>
+        <h2>{{ email }}</h2>
 
 
 
@@ -52,7 +64,21 @@
 </template>
     
 <script setup >
-import xxx from './member/LoginRegister.vue'
+import loginRegister from './member/LoginRegister.vue'
+import { ref } from 'vue';
+const isLoggedIn = ref(true);
+const email = ref("");
+
+function getIsLoggedInFromComponent (data){
+    isLoggedIn.value = data
+    
+}
+function getUserEmail(data){
+    email.value = data
+}
 </script>
     
-<style></style>
+<style>
+.dropdown-menu li:hover .sub-menu {visibility: visible;}
+.dropdown:hover .dropdown-menu {display: block;}
+</style>

@@ -1,15 +1,16 @@
 <template>
         
-        <div><button type="button" v-if="isLoggedIn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login" style="float:right">
+        <div><button type="button" v-if="isLoggedIn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login" >
                     Login/Register
                     </button></div>
-        <div><button class="btn btn-secondary" @click="loggedOut" v-if="!isLoggedIn" style="float:right">登出</button></div>
-        <div><span v-if="!isLoggedIn" style="float:right">{{ email }}</span></div>
+        <div><span v-if="!isLoggedIn" >{{ email }}</span>
+            <button class="btn btn-secondary" @click="loggedOut" v-if="!isLoggedIn" >登出</button></div>
 
 
 
 
-<div class="login" v-if="isShowModal">
+
+<div class="login" >
     <!-- Modal -->
     <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -43,7 +44,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button @click="login" class="btn btn-primary" :disabled="isDisabled">登入</button>
+                                <button @click="login"  class="btn btn-primary" :disabled="isDisabled" data-bs-dismiss="modal">登入</button>
                             </div>
                         </div>
 
@@ -67,12 +68,11 @@
                                 
                             </div>
                             <div class="form-group">
-                                <button @click="signup" class="btn btn-primary" :disabled="isDisabled">註冊</button>
+                                <button @click="signup"  class="btn btn-primary" :disabled="isDisabled" >註冊</button>
                             </div>
                         </div>
                     </div>
             </div>
-       
         </div>
     </div>
     </div>
@@ -91,7 +91,8 @@ import { ref , onMounted} from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import router from '../../router/router.js';
-const isShowModal = ref(true);
+
+
 const email = ref("");
 const isLoggedIn = ref(true);
 const password = ref("");
@@ -106,15 +107,22 @@ const registerActive=ref('nav-link');
 const loginFormActive=ref('tab-pane fade show active');
 const registerFormActive=ref('tab-pane fade');
 
+const emits = defineEmits(
+    ['sendIsLoggedIn','sendUserEmail']
+)
+
+
 function loggedOut(){
     localStorage.removeItem('token');
     isLoggedIn.value = true;
+    emits('sendIsLoggedIn', isLoggedIn.value);
 }
 
 onMounted(() => {
   // 在組件加載時檢查本地存儲中是否有有效的Token
-  const token = localStorage.getItem('token');
+const token = localStorage.getItem('token');
     if (token) {
+        emits('sendIsLoggedIn', false);
         // 假設有Token，用戶已登入，可以向後端發送請求獲取用戶信息等
         isLoggedIn.value = false;
         axios.get("http://localhost:8080/pet/refresh", {
@@ -125,8 +133,7 @@ onMounted(() => {
         // 更新userData
         console.log(response.data);
         email.value = response.data;
-
-
+        emits('sendUserEmail' , email.value)
         }).catch(error => {
         // 處理錯誤
         console.error(error);
@@ -218,12 +225,8 @@ function login() {
                 });
                 setTimeout(function () {
                     Swal.close();
-                    var backdrop = document.querySelector('.modal-backdrop');
-                    isShowModal.value = false;
                     isLoggedIn.value = false;
-                if (backdrop) {
-                    backdrop.parentNode.removeChild(backdrop);
-                }
+                    emits('sendIsLoggedIn', isLoggedIn.value);
                 router.push({name:'home'})
                 }, 1000);
 
@@ -277,11 +280,8 @@ function signup(){
                 setTimeout(function () {
                     Swal.close();
                 }, 1000);
-                var backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.parentNode.removeChild(backdrop);
-                }
-                router.push({name:'home'})
+                setActiveTab('login');
+                isDisabled.value=false;
         }).catch(function(error){
             Swal.fire({
                 icon: "error",
