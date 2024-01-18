@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu" v-if="!isLoggedIn" >
                             <!--  -->
                             <li>
-                                <RouterLink class="dropdown-item" :to="{ name: 'memberInfo' , params:{email:'email'}}">會員中心</RouterLink>
+                                <RouterLink class="dropdown-item" :to="{ name: 'memberInfo' }">會員中心</RouterLink>
                             </li>
                             <li>
                                 <RouterLink class="dropdown-item" :to="{ name: 'infiniteScrolling' }">登出</RouterLink>
