@@ -32,29 +32,30 @@ const userAccount = ref("")
 const userBirth = ref("")
 const userPhoto = ref("")
 const userEmail = ref("")
-const token = localStorage.getItem('token');
+
+
 function photo(event){
     userPhoto.value = event.target.files[0]
 }
 function xxx(){
-
+    console.log(userBirth.value)
     let request ={
-        "userName":userName.value,
-        "userAccount":userAccount.value,
-        "userBirth":userBirth.value,
-        "userPhoto":userPhoto.value
+        "userName":"usert",
+        "userAccount":"usert",
+        "userBirth":"2024-12-04",
+        "userPhoto":"photo4"
     }
-    console.log(request)
-    axios.get("http://localhost:8080/pet/refresh", {
+
+    const token = localStorage.getItem('token');
+    console.log(token);
+    axios.put("http://localhost:8080/pet/memberDetail" ,request,{
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'token':token
         },
         }).then(response => {
-        // 更新userData
         console.log(response.data);
         userEmail.value = response.data;
         }).catch(error => {
-        // 處理錯誤
         console.error(error);
         });
     

@@ -71,6 +71,8 @@
                                 <button @click="signup"  class="btn btn-primary" :disabled="isDisabled" >註冊</button>
                             </div>
                         </div>
+
+
                     </div>
             </div>
         </div>
@@ -127,7 +129,7 @@ const token = localStorage.getItem('token');
         isLoggedIn.value = false;
         axios.get("http://localhost:8080/pet/refresh", {
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'token': token,
         },
         }).then(response => {
         // 更新userData
